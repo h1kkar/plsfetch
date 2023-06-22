@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -80,14 +81,20 @@ func term() string {
 	return arr[len(arr)-1]
 }
 
-var d string = "\033[0m"
-var r string = string("\033[31m")
-var g string = string("\033[32m")
-var y string = string("\033[33m")
-var b string = string("\033[34m")
-var p string = string("\033[35m")
-var c string = string("\033[36m")
-var w string = string("\033[37m")
+func symb(num string) string {
+	return "\033[3" + num + "m"
+}
+
+var (
+	d string = "\033[0m"
+	r string = symb("1")
+	g string = symb("2")
+	y string = symb("3")
+	b string = symb("4")
+	p string = symb("5")
+	c string = symb("6")
+	w string = symb("7")
+)
 
 func color() string {
 	out := r + "██ " + g + "██ " + y + "██ " + b + "██ " + p + "██ " + c + "██ " + w + "██ " + d + "██ "
@@ -99,13 +106,18 @@ func ver() string {
 }
 
 func out() {
-	fmt.Println("   " + b + user() + d + " @ " + b + host())
-	fmt.Println(b + "distro" + w + " · " + b + distro() + " " + arch())
-	fmt.Println(g + "kernel" + w + " · " + g + kernel())
-	fmt.Println(y + "uptime" + w + " · " + y + up())
-	fmt.Println(p + " shell" + w + " · " + p + shell())
-	fmt.Println(r + "    wm" + w + " · " + r + wm())
-	//fmt.Println("\n" + color())
+	num := len(user())
+	if num <= 6 {
+		num = 6
+	}
+	number := strconv.Itoa(num)
+
+	fmt.Printf(b+"%"+number+"s"+d+" @ "+b+"%s\n", user(), host())
+	fmt.Printf(b+"%"+number+"s"+w+" · "+b+"%s %s\n", "distro", distro(), arch())
+	fmt.Printf(g+"%"+number+"s"+w+" · "+g+"%s\n", "kernel", kernel())
+	fmt.Printf(y+"%"+number+"s"+w+" · "+y+"%s\n", "uptime", up())
+	fmt.Printf(p+"%"+number+"s"+w+" · "+p+"%s\n", "shell", shell())
+	fmt.Printf(r+"%"+number+"s"+w+" · "+r+"%s\n", "wm", wm())
 }
 
 func main() {
