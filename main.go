@@ -61,8 +61,23 @@ func up() string {
 	uptime := run("uptime -p")
 	out := strings.Split(uptime, "up")
 	out = strings.Split(out[1], " ")
+	var up string
 
-	return out[1] + "h " + out[3] + "m"
+	hours, _ := strconv.Atoi(out[1])
+
+	switch out[2] {
+	case "hour,", "hours,":
+		if hours/10 < 1 {
+			up = "0" + out[1] + ":" + out[3]
+		} else {
+			up = out[1] + ":" + out[3]
+		}
+
+	case "minute", "minutes":
+		up = "00:" + out[1]
+
+	}
+	return up
 }
 
 func shell() string {
@@ -102,21 +117,21 @@ func color() string {
 }
 
 func ver() string {
-	return "plsfetch v0.6"
+	return "plsfetch v0.7"
 }
 
 func out() {
 	num := len(user())
-	if num <= 6 {
-		num = 6
+	if num <= 3 {
+		num = 4
 	}
 	number := strconv.Itoa(num)
 
-	fmt.Printf(b+"%"+number+"s"+d+" @ "+b+"%s\n", user(), host())
-	fmt.Printf(b+"%"+number+"s"+w+" · "+b+"%s %s\n", "distro", distro(), arch())
-	fmt.Printf(g+"%"+number+"s"+w+" · "+g+"%s\n", "kernel", kernel())
-	fmt.Printf(y+"%"+number+"s"+w+" · "+y+"%s\n", "uptime", up())
-	fmt.Printf(p+"%"+number+"s"+w+" · "+p+"%s\n", "shell", shell())
+	fmt.Printf(w+"%"+number+"s"+d+" @ "+w+"%s\n", user(), host())
+	fmt.Printf(b+"%"+number+"s"+w+" · "+b+"%s %s\n", "os", distro(), arch())
+	fmt.Printf(g+"%"+number+"s"+w+" · "+g+"%s\n", "krn", kernel())
+	fmt.Printf(y+"%"+number+"s"+w+" · "+y+"%s\n", "up", up())
+	fmt.Printf(p+"%"+number+"s"+w+" · "+p+"%s\n", "sh", shell())
 	fmt.Printf(r+"%"+number+"s"+w+" · "+r+"%s\n", "wm", wm())
 }
 
