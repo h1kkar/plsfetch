@@ -102,7 +102,7 @@ func color() string {
 }
 
 func ver() string {
-	return "plsfetch v0.5"
+	return "plsfetch v0.6"
 }
 
 func out() {
